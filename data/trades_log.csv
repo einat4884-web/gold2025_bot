@@ -1,0 +1,2 @@
+timestamp,symbol,side,qty,entry_price,exit_price,pnl,status,order_id
+2025-11-08T21:09:04.921674,EURUSD,BUY,1,,,,submitted,16
