@@ -49,7 +49,7 @@ def build_contract():
 def main():
     mode = (env("IBKR_MODE","paper") or "paper").lower()
     host = env("IBKR_HOST","127.0.0.1")
-    port = int(env("IBKR_PORT","7497"))
+    port = int(env("IBKR_PORT","4002"))
     client_id = int(env("IBKR_CLIENT_ID","1"))
     DRY_RUN = (env("DRY_RUN","false") or "false").lower() == "true"
 
