@@ -25,4 +25,18 @@ try:
     b = ib.placeOrder(c, buy_order)
     while not b.isDone():
         ib.sleep(0.2)
-    print("BUY:", b.orderStatus.status, "f
+    print("BUY:", b.orderStatus.status, "filled:", b.orderStatus.filled)
+
+    ib.sleep(1)
+
+    # SELL with explicit TIF and account
+    sell_order = MarketOrder("SELL", qty, tif="DAY")
+    sell_order.account = acct
+    s = ib.placeOrder(c, sell_order)
+    while not s.isDone():
+        ib.sleep(0.2)
+    print("SELL:", s.orderStatus.status, "filled:", s.orderStatus.filled)
+
+    print("Done")
+finally:
+    ib.disconnect()
