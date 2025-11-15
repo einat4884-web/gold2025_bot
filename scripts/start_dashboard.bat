@@ -1,4 +1,6 @@
 @echo off
 cd /d "%~dp0"
+cd ..
 echo Starting Streamlit dashboard...
-streamlit run dashboard2025.py
+start "" streamlit run dashboard2025.py --server.headless=true
+pause
