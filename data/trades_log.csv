@@ -16,3 +16,5 @@ timestamp,symbol,side,qty,entry_price,exit_price,pnl,status,order_id
 2025-11-15T13:49:18.094696,XAUUSD,BUY,1,,,,dry-run,DRY_1763214558
 2025-11-15T14:37:35.321986,XAUUSD,BUY,1,,,,submitted,16
 2025-11-22T06:33:57.906781,XAUUSD,BUY,1,,,,submitted,4
+2025-11-22T08:37:59.411178,XAUUSD,BUY,1,,,,submitted,4
+2025-11-22T09:06:03.693180,XAUUSD,BUY,1,,,,submitted,4
