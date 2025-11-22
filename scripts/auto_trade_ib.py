@@ -4,7 +4,67 @@ from datetime import datetime
 from dotenv import load_dotenv
 from ib_insync import IB, Forex, Stock, Future, util, Contract, MarketOrder, LimitOrder, StopOrder
 import pandas as pd
+# =========================
+#   HFT / SPIKE DETECTION
+# =========================
+def is_hft_candle(
+    candle,
+    atr_value,
+    body_multiplier: float = 3.0,
+    wick_multiplier: float = 3.0,
+    min_atr: float = 0.1
+) -> bool:
+    """
+    Detects extreme / spike candles (potential HFT activity) to avoid entries
+    during highly unstable price movements.
 
+    Parameters
+    ----------
+    candle : object
+        Candle/bar with attributes: open, high, low, close.
+    atr_value : float
+        Current ATR value.
+    body_multiplier : float
+        Threshold multiplier for body size vs ATR.
+    wick_multiplier : float
+        Threshold multiplier for wick size vs ATR.
+    min_atr : float
+        Minimum ATR below which the check is ignored.
+
+    Returns
+    -------
+    bool
+        True if the candle is considered an HFT/spike candle, else False.
+    """
+
+    # If ATR is not valid, do not block trades
+    if atr_value is None or atr_value < min_atr:
+        return False
+
+    o = float(candle.open)
+    h = float(candle.high)
+    l = float(candle.low)
+    c = float(candle.close)
+
+    body = abs(c - o)
+    total_range = h - l
+    upper_wick = h - max(o, c)
+    lower_wick = min(o, c) - l
+    max_wick = max(upper_wick, lower_wick)
+
+    # Condition 1: very large body compared to ATR
+    if body >= body_multiplier * atr_value:
+        return True
+
+    # Condition 2: very long wick compared to ATR
+    if max_wick >= wick_multiplier * atr_value:
+        return True
+
+    # Condition 3: overall candle range is extremely large
+    if total_range >= max(body_multiplier, wick_multiplier) * atr_value:
+        return True
+
+    return False
 load_dotenv()
 ROOT = os.path.dirname(__file__)
 DATA_DIR = os.path.join(os.path.dirname(ROOT), 'data') if os.path.basename(ROOT) == 'scripts' else os.path.join(ROOT, 'data')
